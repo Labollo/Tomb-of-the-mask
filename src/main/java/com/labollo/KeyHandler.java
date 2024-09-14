@@ -2,9 +2,10 @@ package com.labollo;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.security.Key;
 
 public class KeyHandler implements KeyListener {
-    private GamePanel gp;
+    private final GamePanel gp;
 
     public boolean upPressed = false, downPressed = false, rightPressed = false, leftPressed = false;
 
@@ -12,41 +13,38 @@ public class KeyHandler implements KeyListener {
         this.gp = gp;
     }
 
-    @Override
-    public void keyTyped(KeyEvent e) {
-
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-
-    }
 
     @Override
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
 
-        switch (key) {
-            case KeyEvent.VK_UP -> {
-                this.gp.userInterface.commandNum = (this.gp.userInterface.commandNum - 1 + 2) % 2;
-            }
-            case KeyEvent.VK_DOWN -> {
+        if (this.gp.gameState == GamePanel.MENU_STATE)
+            menuState(key);
+        else if (this.gp.gameState == GamePanel.PLAY_STATE)
+            playState(key);
+    }
 
-
-                this.gp.userInterface.commandNum = (this.gp.userInterface.commandNum + 1) % 2;
-            }
-            case KeyEvent.VK_ENTER -> {
-                switch (this.gp.userInterface.commandNum) {
-                    case 0 -> {
-                        this.gp.gameState = GamePanel.PLAY_STATE;
-
-                    }
-                    case 1-> {
-                        System.exit(0);
-                    }
-
-                }
-            }
+    private void menuState(int key) {
+        if (key == KeyEvent.VK_UP)
+            this.gp.userInterface.commandNum = (this.gp.userInterface.commandNum - 1 + 2) % 2;
+        else if (key == KeyEvent.VK_DOWN)
+            this.gp.userInterface.commandNum = (this.gp.userInterface.commandNum + 1) % 2;
+        else if (key == KeyEvent.VK_ENTER) {
+            if (this.gp.userInterface.commandNum == 0)
+                this.gp.gameState = GamePanel.PLAY_STATE;
+            else if (this.gp.userInterface.commandNum == 1)
+                System.exit(0);
         }
+    }
+
+    private void playState(int key) {
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
     }
 }

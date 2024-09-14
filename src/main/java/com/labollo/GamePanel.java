@@ -4,34 +4,43 @@ import javax.swing.*;
 import java.awt.*;
 
 public class GamePanel extends JPanel implements Runnable {
-    public static final int SCREEN_HEIGHT = 600;
+    // Window constants
     public static final int SCREEN_WIDTH = 800;
+    public static final int SCREEN_HEIGHT = 600;
 
-    public static final int FPS = 60;
-    public static final int PLAY_STATE = 0;
-    public static final int MENU_STATE = 1;
+    // Game state
+    public static final int MENU_STATE = 0;
+    public static final int PLAY_STATE = 1;
     public int gameState;
 
+    // Game thread
+    public Thread gameThread;
+
+    // FPS
+    public static final int FPS = 60;
+
+    // Other components
     public KeyHandler keyHandler;
     public UserInterface userInterface;
 
-    public Thread gameThread;
-
-
     public GamePanel() {
-       super.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
-       super.setBackground(Color.BLACK);
-
        this.keyHandler = new KeyHandler(this);
        this.userInterface = new UserInterface(this);
-       this.gameState = MENU_STATE;
 
-       super.addKeyListener(this.keyHandler);
-       super.setFocusable(true);
+       super.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT)); // Set size
+       super.setBackground(Color.BLACK); // Set background color
+       super.addKeyListener(this.keyHandler); // Add key listener
+       super.setFocusable(true); // Set focusable state
 
-       startGameThread();
-        repaint();
+       // Set some game properties
+       this.setup();
 
+       // Start the game loop
+       this.startGameThread();
+    }
+
+    private void setup() {
+        this.gameState = MENU_STATE;
     }
 
     private void startGameThread() {
@@ -62,6 +71,8 @@ public class GamePanel extends JPanel implements Runnable {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        userInterface.draw(g);
+        this.userInterface.draw(g);
+
+        g.dispose();
     }
 }

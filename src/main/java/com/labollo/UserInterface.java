@@ -4,14 +4,17 @@ import java.awt.*;
 
 public class UserInterface {
     private GamePanel gp;
+    private Graphics2D g2;
 
-    public  int commandNum = 0;
+    public int commandNum = 0;
 
     public UserInterface(GamePanel gp) {
         this.gp = gp;
     }
 
     public void draw(Graphics g) {
+        this.g2 = (Graphics2D) g;
+
         if (gp.gameState == GamePanel.MENU_STATE) {
             drawMenu(g);
         }
@@ -21,51 +24,62 @@ public class UserInterface {
     }
 
     private void drawMenu(Graphics g) {
-        String title = " Tomb-Of-The-Mask";
-        String buttonPlay = "Play";
-        String quit = "Quit";
+        String message;
+        int x, y;
         Color darkGreen = new Color(0,100,0);
+        g.setFont(new Font("Agency FB", Font.BOLD, 96));
 
         // Title
-        g.setFont(new Font("Agency FB", Font.BOLD, 60));
+        message = "Tomb of the mask";
+        x = getXForCenteredText(message);
+        y = 120;
+
         g.setColor(darkGreen);
-        g.drawString(title, GamePanel.SCREEN_WIDTH / 2 - g.getFontMetrics().stringWidth(title) / 2 + 6, 160 + 6);
+        g.drawString(message, x + 6, y + 6);
+
         g.setColor(Color.GREEN);
-        g.drawString(title, GamePanel.SCREEN_WIDTH / 2 - g.getFontMetrics().stringWidth(title) / 2, 160);
+        g.drawString(message, x, y);
         //------------------------------
-        // Play button
         g.setFont(new Font("Agency FB", Font.BOLD, 55));
+        // Play button
+        message = "Play";
+        x = getXForCenteredText(message);
+        y += 200;
         g.setColor(darkGreen);
-        g.drawString(buttonPlay, GamePanel.SCREEN_WIDTH / 2 - g.getFontMetrics().stringWidth(buttonPlay) / 2 + 4,350 + 5);
+        g.drawString(message, x + 4,y + 5);
+
         g.setColor(Color.GREEN);
-        g.drawString(buttonPlay, GamePanel.SCREEN_WIDTH / 2 - g.getFontMetrics().stringWidth(buttonPlay) / 2,350);
-        //------------------------------
-        // Quit button
-        g.setColor(darkGreen);
-        g.drawString(quit, GamePanel.SCREEN_WIDTH / 2 - g.getFontMetrics().stringWidth(quit) / 2 + 4,420 + 5);
-        g.setColor(Color.GREEN);
-        g.drawString(quit, GamePanel.SCREEN_WIDTH / 2 - g.getFontMetrics().stringWidth(quit) / 2,420);
-        //------------------------------
-        // Quit button
-        g.setColor(darkGreen);
-        if (commandNum == 0) {
-            //if 0 play
+        g.drawString(message, x,y);
+        if (commandNum == 0) { // Play
             g.setColor(darkGreen);
-            g.drawString(">", GamePanel.SCREEN_WIDTH / 2 - g.getFontMetrics().stringWidth(">") / 2 - 70,350);
+            g.drawString(">", x - 70 + 3,y + 3);
             g.setColor(Color.GREEN);
-            g.drawString(">", GamePanel.SCREEN_WIDTH / 2 - g.getFontMetrics().stringWidth(">") / 2 + 4 - 70,350 + 5);
-        }else if (commandNum == 1) {
-            //if 1 quit
-            g.setColor(darkGreen);
-            g.drawString(">", GamePanel.SCREEN_WIDTH / 2 - g.getFontMetrics().stringWidth(">") / 2 - 70,420);
-            g.setColor(Color.GREEN);
-            g.drawString(">", GamePanel.SCREEN_WIDTH / 2 - g.getFontMetrics().stringWidth(">") / 2 + 4 - 70,420 + 5);
+            g.drawString(">", x - 70,y);
         }
-        System.out.println(commandNum);
         //------------------------------
+        // Quit button
+        message = "Quit";
+        x = getXForCenteredText(message);
+        y += 70;
+        g.setColor(darkGreen);
+        g.drawString(message, x + 4,y + 5);
+        g.setColor(Color.GREEN);
+        g.drawString(message, x,y);
+        if (commandNum == 1) { // Quit
+            g.setColor(darkGreen);
+            g.drawString(">", x - 70 + 3 ,y + 3);
+            g.setColor(Color.GREEN);
+            g.drawString(">", x - 70, y);
+        }
     }
 
     private void drawPlay(Graphics g) {
 
+    }
+
+    public int getXForCenteredText(String text) {
+        FontMetrics metrics = this.g2.getFontMetrics();
+        int length = metrics.stringWidth(text);
+        return GamePanel.SCREEN_WIDTH / 2 - length / 2;
     }
 }
